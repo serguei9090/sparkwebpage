@@ -4,19 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Google Spark — Autonomous Multimodal Intelligence & Research Engine</title>
-  <meta name="description" content="Discover Google Spark: The next-generation autonomous multimodal AI research and execution engine powered by Gemini architecture.">
+  <meta name="description" content="Discover Google Spark: The next-generation autonomous multimodal AI research and execution engine powered by Gemini architecture, subagent orchestration, and universal MCP toolchains.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- React & ReactDOM -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-  <!-- Babel for JSX transformation in browser -->
+  <!-- Babel for JSX compilation -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
 
   <script>
     tailwind.config = {
@@ -29,32 +28,39 @@
               red: '#EA4335',
               yellow: '#FBBC05',
               green: '#34A853',
-              darkBg: '#0f172a',
-              darkSurface: '#1e293b',
-              darkCard: '#182234',
-              lightBg: '#f8fafc',
-              lightSurface: '#ffffff',
-              lightCard: '#f1f5f9',
+              darkBg: '#080c14',
+              darkSurface: '#0f172a',
+              darkCard: '#131d31',
+              darkBorder: '#1e293b',
+              accentBlue: '#2563eb',
             }
           },
           fontFamily: {
-            sans: ['"Google Sans"', 'Inter', 'sans-serif'],
+            sans: ['"Google Sans"', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
             mono: ['"JetBrains Mono"', 'monospace'],
           },
+          boxShadow: {
+            'glow-blue': '0 0 35px -5px rgba(66, 133, 244, 0.35)',
+            'glow-red': '0 0 35px -5px rgba(234, 67, 53, 0.35)',
+            'glow-yellow': '0 0 35px -5px rgba(251, 188, 5, 0.35)',
+            'glow-green': '0 0 35px -5px rgba(52, 168, 83, 0.35)',
+            'glow-multi': '0 0 50px -10px rgba(66, 133, 244, 0.25), 0 0 30px -10px rgba(234, 67, 53, 0.2)',
+            'premium-card': '0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 0 1px 1px rgba(255, 255, 255, 0.05)',
+          },
           animation: {
-            'gradient-x': 'gradient-x 10s ease infinite',
-            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-            'float': 'float 6s ease-in-out infinite',
-            'spin-slow': 'spin 12s linear infinite',
+            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'spin-slow': 'spin 20s linear infinite',
+            'float': 'float 5s ease-in-out infinite',
+            'shimmer': 'shimmer 2.5s infinite',
           },
           keyframes: {
-            'gradient-x': {
-              '0%, 100%': { 'background-size': '200% 200%', 'background-position': 'left center' },
-              '50%': { 'background-size': '200% 200%', 'background-position': 'right center' },
-            },
-            'float': {
+            float: {
               '0%, 100%': { transform: 'translateY(0px)' },
-              '50%': { transform: 'translateY(-10px)' },
+              '50%': { transform: 'translateY(-8px)' },
+            },
+            shimmer: {
+              '0%': { backgroundPosition: '-200% 0' },
+              '100%': { backgroundPosition: '200% 0' },
             }
           }
         }
@@ -62,46 +68,64 @@
     }
   </script>
   <style>
-    /* Google Color Gradient Utilities */
+    /* Premium Design System Utilities */
+    body {
+      background-color: #060911;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(66, 133, 244, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(234, 67, 53, 0.08) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(52, 168, 83, 0.08) 0px, transparent 50%);
+      background-attachment: fixed;
+    }
     .google-gradient-text {
       background: linear-gradient(135deg, #4285F4 0%, #EA4335 35%, #FBBC05 70%, #34A853 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    .google-border-gradient {
-      border-image: linear-gradient(to right, #4285F4, #EA4335, #FBBC05, #34A853) 1;
+    .google-gradient-bg {
+      background: linear-gradient(135deg, #4285F4 0%, #EA4335 35%, #FBBC05 70%, #34A853 100%);
     }
-    .google-glow-blue {
-      box-shadow: 0 0 35px -5px rgba(66, 133, 244, 0.35);
+    .subtle-border {
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
-    .google-glow-all {
-      box-shadow: 0 0 50px -10px rgba(66, 133, 244, 0.25), 0 0 30px -10px rgba(234, 67, 53, 0.2);
+    .glass-card {
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
-    /* Custom Scrollbar */
+    .glass-card:hover {
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+    .dot-pattern {
+      background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    /* Custom refined scrollbar */
     ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
+      width: 6px;
+      height: 6px;
     }
     ::-webkit-scrollbar-track {
-      background: #0f172a;
+      background: #060911;
     }
     ::-webkit-scrollbar-thumb {
-      background: #334155;
-      border-radius: 4px;
+      background: #1e293b;
+      border-radius: 9999px;
     }
     ::-webkit-scrollbar-thumb:hover {
       background: #4285F4;
     }
   </style>
 </head>
-<body class="bg-[#0b0f19] text-slate-100 font-sans antialiased selection:bg-[#4285F4]/30 selection:text-white min-h-screen flex flex-col transition-colors duration-300">
+<body class="text-slate-100 font-sans antialiased selection:bg-[#4285F4]/30 selection:text-white min-h-screen flex flex-col">
   <div id="root"></div>
 
-  <!-- React Application Code -->
+  <!-- React Application Source -->
   <script type="text/babel">
-    const { useState, useEffect, useRef } = React;
+    const { useState, useEffect, useRef, useMemo } = React;
 
-    // Google Spark Color Bar Component
+    // Google 4-Color Signature Accent Bar
     const GoogleColorBar = ({ className = "h-1 w-full" }) => (
       <div className={`flex ${className}`}>
         <div className="w-1/4 bg-[#4285F4]"></div>
@@ -111,82 +135,93 @@
       </div>
     );
 
-    // Spark Logo Icon Component
-    const SparkIcon = ({ className = "w-8 h-8" }) => (
+    // Spark Emblem Logo with multi-ring animation
+    const SparkEmblem = ({ className = "w-8 h-8", animated = true }) => (
       <div className={`relative flex items-center justify-center ${className}`}>
-        <svg viewBox="0 0 100 100" className="w-full h-full animate-spin-slow">
-          <circle cx="50" cy="50" r="42" fill="none" stroke="url(#googleRing)" strokeWidth="8" strokeDasharray="60 15 30 15 45 15" strokeLinecap="round" />
+        <svg viewBox="0 0 100 100" className={`w-full h-full ${animated ? 'animate-spin-slow' : ''}`}>
+          <circle cx="50" cy="50" r="42" fill="none" stroke="url(#sparkRingGrad)" strokeWidth="6" strokeDasharray="50 15 35 15 45 15" strokeLinecap="round" />
           <defs>
-            <linearGradient id="googleRing" x1="0%" y1="0%" x2="100%" y2="100%">
+            <linearGradient id="sparkRingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="#4285F4" />
-              <stop offset="33%" stopColor="#EA4335" />
-              <stop offset="66%" stopColor="#FBBC05" />
+              <stop offset="35%" stopColor="#EA4335" />
+              <stop offset="70%" stopColor="#FBBC05" />
               <stop offset="100%" stopColor="#34A853" />
             </linearGradient>
           </defs>
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-xl">✨</span>
+          <span className="text-base sm:text-lg select-none">✨</span>
         </div>
       </div>
     );
 
-    // Navbar Component
+    // Navigation Bar
     const Navbar = ({ activeSection, setActiveSection }) => {
       const [scrolled, setScrolled] = useState(false);
       const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
       useEffect(() => {
         const handleScroll = () => {
-          if (window.scrollY > 20) setScrolled(true);
-          else setScrolled(false);
+          setScrolled(window.scrollY > 25);
         };
-        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('scroll', handleScroll, { passive: true });
         return () => window.removeEventListener('scroll', handleScroll);
       }, []);
 
       const navItems = [
         { label: 'Overview', id: 'overview' },
         { label: 'Capabilities', id: 'capabilities' },
+        { label: 'Simulator', id: 'sandbox' },
         { label: 'Tool Ecosystem', id: 'tools' },
-        { label: 'Interactive Sandbox', id: 'sandbox' },
         { label: 'Architecture', id: 'architecture' },
-        { label: 'Benchmarks', id: 'benchmarks' }
+        { label: 'Benchmarks', id: 'benchmarks' },
+        { label: 'FAQ', id: 'faq' }
       ];
 
       return (
-        <header className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'bg-[#0f172a]/90 backdrop-blur-md border-b border-slate-800 shadow-xl' : 'bg-transparent'}`}>
-          <GoogleColorBar className="h-[3px] w-full" />
+        <header className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'bg-[#060911]/85 backdrop-blur-xl border-b border-slate-800/80 shadow-2xl' : 'bg-transparent'}`}>
+          <GoogleColorBar className="h-[2.5px] w-full" />
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-16">
-              {/* Logo */}
-              <div className="flex items-center space-x-3 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-                <SparkIcon className="w-9 h-9" />
+              
+              {/* Logo & Identity */}
+              <div 
+                className="flex items-center space-x-3 cursor-pointer group"
+                onClick={() => {
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                  setActiveSection('overview');
+                }}
+              >
+                <SparkEmblem className="w-8 h-8 group-hover:scale-105 transition-transform" />
                 <div className="flex flex-col">
-                  <span className="font-bold text-lg tracking-tight flex items-center gap-1.5">
-                    <span>Google</span>
-                    <span className="google-gradient-text font-black text-xl">Spark</span>
-                  </span>
-                  <span className="text-[10px] text-slate-400 font-mono tracking-wider uppercase">Gemini Autonomous Engine</span>
+                  <div className="flex items-center gap-1.5 leading-none">
+                    <span className="font-bold text-slate-200 text-base tracking-tight">Google</span>
+                    <span className="google-gradient-text font-extrabold text-lg tracking-tight">Spark</span>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-blue-500/10 text-[#4285F4] border border-blue-500/20 font-mono font-bold">2.5</span>
+                  </div>
+                  <span className="text-[9px] text-slate-400 font-mono tracking-wider uppercase mt-0.5">Autonomous Research Engine</span>
                 </div>
               </div>
 
-              {/* Desktop Nav */}
-              <nav className="hidden md:flex items-center space-x-1 lg:space-x-2">
-                {navItems.map((item) => (
-                  <a
-                    key={item.id}
-                    href={`#${item.id}`}
-                    onClick={() => setActiveSection(item.id)}
-                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-                      activeSection === item.id 
-                        ? 'text-white bg-slate-800/80 border border-slate-700 shadow-inner' 
-                        : 'text-slate-300 hover:text-white hover:bg-slate-800/40'
-                    }`}
-                  >
-                    {item.label}
-                  </a>
-                ))}
+              {/* Desktop Nav Items */}
+              <nav className="hidden lg:flex items-center p-1 rounded-full bg-slate-900/60 border border-slate-800 backdrop-blur-md">
+                {navItems.map((item) => {
+                  const isActive = activeSection === item.id;
+                  return (
+                    <a
+                      key={item.id}
+                      href={`#${item.id}`}
+                      onClick={() => setActiveSection(item.id)}
+                      className={`px-3.5 py-1 rounded-full text-xs font-medium transition-all duration-200 ${
+                        isActive
+                          ? 'text-white bg-slate-800 shadow-sm border border-slate-700'
+                          : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                      }`}
+                    >
+                      {item.label}
+                    </a>
+                  );
+                })}
               </nav>
 
               {/* Action Buttons */}
@@ -195,28 +230,28 @@
                   href="https://github.com/serguei9090/sparkwebpage"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition shadow-sm"
+                  className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 hover:border-slate-700 transition shadow-sm"
                 >
-                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                  <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
                     <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
                   </svg>
-                  <span>GitHub Repo</span>
+                  <span>GitHub</span>
                 </a>
                 <a
                   href="#sandbox"
-                  className="px-4 py-1.5 rounded-lg text-xs font-semibold bg-gradient-to-r from-[#4285F4] to-[#1a73e8] hover:from-[#5294ff] hover:to-[#227bf0] text-white shadow-lg shadow-blue-500/25 transition flex items-center gap-1.5"
+                  className="px-4 py-1.5 rounded-lg text-xs font-semibold bg-gradient-to-r from-[#4285F4] to-[#2563eb] hover:from-[#5294ff] hover:to-[#3b82f6] text-white shadow-lg shadow-blue-500/20 transition flex items-center gap-1.5"
                 >
-                  <span>⚡ Try Playground</span>
+                  <span>⚡ Try Simulator</span>
                 </a>
               </div>
 
-              {/* Mobile menu button */}
-              <div className="md:hidden flex items-center">
+              {/* Mobile Menu Hamburger */}
+              <div className="lg:hidden flex items-center">
                 <button
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                   className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800"
                 >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     {mobileMenuOpen ? (
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                     ) : (
@@ -225,29 +260,30 @@
                   </svg>
                 </button>
               </div>
+
             </div>
           </div>
 
-          {/* Mobile menu dropdown */}
+          {/* Mobile Dropdown */}
           {mobileMenuOpen && (
-            <div className="md:hidden bg-[#0f172a] border-b border-slate-800 px-4 pt-2 pb-4 space-y-1">
+            <div className="lg:hidden bg-[#060911] border-b border-slate-800 px-4 py-3 space-y-1 shadow-2xl">
               {navItems.map((item) => (
                 <a
                   key={item.id}
                   href={`#${item.id}`}
                   onClick={() => { setActiveSection(item.id); setMobileMenuOpen(false); }}
-                  className="block px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800"
+                  className="block px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60"
                 >
                   {item.label}
                 </a>
               ))}
-              <div className="pt-2 flex flex-col gap-2">
+              <div className="pt-2 border-t border-slate-800">
                 <a
                   href="https://github.com/serguei9090/sparkwebpage"
                   target="_blank"
-                  className="w-full text-center py-2 rounded-lg bg-slate-800 text-sm font-semibold text-slate-200"
+                  className="block text-center py-2 rounded-lg bg-slate-800 text-xs font-semibold text-slate-200"
                 >
-                  GitHub Repository
+                  View GitHub Repository
                 </a>
               </div>
             </div>
@@ -256,50 +292,56 @@
       );
     };
 
-    // Hero Section Component
-    const HeroSection = () => {
+    // Hero Section with Live Telemetry & Interactive Prompt Chips
+    const HeroSection = ({ onSelectPrompt }) => {
+      const promptIdeas = [
+        { label: "📦 Deploy 'sparkwebpage' to GitHub Pages", scenario: "github" },
+        { label: "📊 Audit 12 Cloud Invoices & Sync Sheets", scenario: "workspace" },
+        { label: "🎥 Video AST Parsing to Rust Grammar", scenario: "multimodal" },
+        { label: "🌐 Autonomous Web Hotel & Flight Booker", scenario: "web" }
+      ];
+
       return (
-        <section id="overview" className="relative pt-12 pb-20 md:pt-20 md:pb-32 overflow-hidden">
-          {/* Background Ambient Glows */}
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-gradient-to-tr from-[#4285F4]/20 via-[#EA4335]/15 to-[#34A853]/15 blur-[120px] pointer-events-none rounded-full"></div>
-          
+        <section id="overview" className="relative pt-12 pb-20 md:pt-20 md:pb-28 overflow-hidden dot-pattern">
+          {/* Subtle Ambient Radial Glows */}
+          <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[400px] bg-gradient-to-tr from-[#4285F4]/15 via-[#EA4335]/10 to-[#34A853]/10 blur-[130px] pointer-events-none rounded-full"></div>
+
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="text-center max-w-4xl mx-auto">
               
-              {/* Badge */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/90 border border-slate-700/80 shadow-md mb-8 hover:border-[#4285F4]/50 transition">
+              {/* Architecture Badge */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/90 border border-slate-800 shadow-md mb-8 hover:border-slate-700 transition">
                 <span className="flex h-2 w-2 relative">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#34A853] opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-[#34A853]"></span>
                 </span>
-                <span className="text-xs font-semibold text-slate-300 tracking-wide">
-                  Gemini Spark 2.5 Architecture • Model Context Protocol Active
+                <span className="text-xs font-medium text-slate-300">
+                  Gemini Spark 2.5 Multi-Modal Architecture • MCP v1.8 Active
                 </span>
               </div>
 
               {/* Main Headline */}
               <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white mb-6 leading-tight">
-                Autonomous Multimodal Intelligence & <br />
-                <span className="google-gradient-text">Research Orchestration</span>
+                Autonomous Multimodal <br />
+                <span className="google-gradient-text">Research & Execution Engine</span>
               </h1>
 
-              {/* Subheadline */}
-              <p className="text-lg sm:text-xl text-slate-300 mb-10 max-w-3xl mx-auto leading-relaxed font-normal">
-                Google Spark represents an autonomous personal research assistant built on Gemini's multimodal cognitive foundation. 
-                Orchestrating concurrent subagents, universal developer tools, live workspace APIs, and rigorous privacy governance in real time.
+              {/* Subtitle */}
+              <p className="text-base sm:text-xl text-slate-300 mb-10 max-w-3xl mx-auto leading-relaxed font-normal">
+                Google Spark represents an advanced personal research intelligence. Orchestrating concurrent subagent swarms, universal Model Context Protocols, sandboxed VM execution, and zero-leak privacy guardrails in real time.
               </p>
 
-              {/* CTAs */}
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+              {/* Primary CTAs */}
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
                 <a
                   href="#sandbox"
-                  className="w-full sm:w-auto px-8 py-3.5 rounded-xl font-bold text-sm bg-gradient-to-r from-[#4285F4] via-[#3367d6] to-[#1a73e8] hover:from-[#5294ff] hover:to-[#227bf0] text-white shadow-xl shadow-blue-500/30 transition transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto px-8 py-3.5 rounded-xl font-bold text-sm bg-gradient-to-r from-[#4285F4] via-[#2b71eb] to-[#1a73e8] hover:from-[#5294ff] hover:to-[#227bf0] text-white shadow-xl shadow-blue-500/25 transition transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
                 >
                   <span>✨ Launch Interactive Agent Simulator</span>
                 </a>
                 <a
                   href="#capabilities"
-                  className="w-full sm:w-auto px-8 py-3.5 rounded-xl font-bold text-sm bg-slate-800/90 hover:bg-slate-700/90 text-slate-200 border border-slate-700 shadow-md transition flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto px-8 py-3.5 rounded-xl font-semibold text-sm bg-slate-900/90 hover:bg-slate-800 text-slate-200 border border-slate-800 hover:border-slate-700 shadow-md transition flex items-center justify-center gap-2"
                 >
                   <svg className="w-4 h-4 text-[#FBBC05]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
@@ -308,23 +350,42 @@
                 </a>
               </div>
 
-              {/* Stats Bar with Google Color Accents */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 bg-slate-900/60 backdrop-blur-xl border border-slate-800 rounded-2xl shadow-2xl">
-                <div className="p-3 border-l-2 border-[#4285F4] text-left">
-                  <div className="text-2xl lg:text-3xl font-black text-white">100%</div>
-                  <div className="text-xs text-slate-400 uppercase tracking-wider font-mono">Multimodal Synthesis</div>
+              {/* Quick Try Prompt Chips */}
+              <div className="mb-14">
+                <div className="text-[11px] text-slate-400 font-mono uppercase tracking-wider mb-2.5">
+                  Try a simulated autonomous workflow:
                 </div>
-                <div className="p-3 border-l-2 border-[#EA4335] text-left">
-                  <div className="text-2xl lg:text-3xl font-black text-white">Parallel</div>
-                  <div className="text-xs text-slate-400 uppercase tracking-wider font-mono">Subagent Execution</div>
+                <div className="flex flex-wrap items-center justify-center gap-2">
+                  {promptIdeas.map((p, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => onSelectPrompt(p.scenario)}
+                      className="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 hover:border-slate-700 transition flex items-center gap-1.5 shadow-sm"
+                    >
+                      <span>{p.label}</span>
+                      <span className="text-slate-500">→</span>
+                    </button>
+                  ))}
                 </div>
-                <div className="p-3 border-l-2 border-[#FBBC05] text-left">
-                  <div className="text-2xl lg:text-3xl font-black text-white">15+ MCPs</div>
-                  <div className="text-xs text-slate-400 uppercase tracking-wider font-mono">Integrated Toolchains</div>
+              </div>
+
+              {/* Telemetry Bar */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-5 glass-card rounded-2xl shadow-2xl">
+                <div className="p-3 text-left border-l-2 border-[#4285F4]">
+                  <div className="text-2xl lg:text-3xl font-extrabold text-white">1.0M+</div>
+                  <div className="text-[11px] text-slate-400 font-mono uppercase tracking-wider mt-0.5">Token Context Engine</div>
                 </div>
-                <div className="p-3 border-l-2 border-[#34A853] text-left">
-                  <div className="text-2xl lg:text-3xl font-black text-white">Zero-Leak</div>
-                  <div className="text-xs text-slate-400 uppercase tracking-wider font-mono">Privacy Guardrails</div>
+                <div className="p-3 text-left border-l-2 border-[#EA4335]">
+                  <div className="text-2xl lg:text-3xl font-extrabold text-white">Parallel</div>
+                  <div className="text-[11px] text-slate-400 font-mono uppercase tracking-wider mt-0.5">Subagent Delegation</div>
+                </div>
+                <div className="p-3 text-left border-l-2 border-[#FBBC05]">
+                  <div className="text-2xl lg:text-3xl font-extrabold text-white">18+ MCPs</div>
+                  <div className="text-[11px] text-slate-400 font-mono uppercase tracking-wider mt-0.5">Connected Toolchains</div>
+                </div>
+                <div className="p-3 text-left border-l-2 border-[#34A853]">
+                  <div className="text-2xl lg:text-3xl font-extrabold text-white">Zero-Leak</div>
+                  <div className="text-[11px] text-slate-400 font-mono uppercase tracking-wider mt-0.5">Privacy Guardrails</div>
                 </div>
               </div>
 
@@ -334,8 +395,10 @@
       );
     };
 
-    // 4-Color Feature Cards Component
+    // Bento Grid Core Pillars & Capabilities
     const CapabilitiesSection = () => {
+      const [activeCodeTab, setActiveCodeTab] = useState('subagent');
+
       const capabilities = [
         {
           id: 'multimodal',
@@ -351,8 +414,7 @@
             'Complex multi-variable constraint satisfaction',
             'Cross-modality temporal reasoning over historical windows',
             'Automated fact verification and strict citation protocol'
-          ],
-          sampleCode: 'await spark.reason({\\n  inputs: [docStream, videoFeed, financialTable],\\n  objective: "Synthesize quarterly risk factors"\\n});'
+          ]
         },
         {
           id: 'subagents',
@@ -368,8 +430,7 @@
             'Concurrent multi-entity scraping & deep document analysis',
             'Zero context bloating in primary orchestrator loop',
             'Self-correcting verification before synthesizing final deliverable'
-          ],
-          sampleCode: 'const workers = await Promise.all([\\n  spark.spawnSubagent({ task: "Audit PR #42 diff" }),\\n  spark.spawnSubagent({ task: "Extract DB schema" })\\n]);'
+          ]
         },
         {
           id: 'toolchain',
@@ -385,8 +446,7 @@
             'Isolated VM Bash execution for deterministic script tasks',
             'Native Google Docs/Sheets/Slides creation with exact styling',
             'Calendar conflict resolution & automated email routing'
-          ],
-          sampleCode: 'await githubMcp.createRepository({ name: "sparkwebpage" });\\nawait bash.execute("python3 -m unittest discover");'
+          ]
         },
         {
           id: 'privacy',
@@ -402,17 +462,52 @@
             'Multi-source data conflict resolution with temporal recency weighting',
             'Mandatory human confirmation for high-stakes mutations',
             'Automatic redaction of sensitive credentials and tokens'
-          ],
-          sampleCode: 'spark.enforceGuardrails({\\n  dataPolicy: "STRICT_ZERO_UNSOLICITED_SENSITIVE_LEAK",\\n  auditTrail: true\\n});'
+          ]
         }
       ];
 
+      const codeSnippets = {
+        subagent: `// Parallel Subagent Spawning in Google Spark
+const [prAudit, schemaAudit, securityScan] = await Promise.all([
+  spark.spawnSubagent({
+    task: "Audit diff in PR #104 against security baseline",
+    tools: ["github:pull_request_read", "custom_mcp:get_commit"]
+  }),
+  spark.spawnSubagent({
+    task: "Extract database entity relationship diagram from schema.sql",
+    tools: ["vm_shell:execute_bash"]
+  }),
+  spark.spawnSubagent({
+    task: "Scan codebase for unredacted tokens and API keys",
+    tools: ["custom_mcp:run_secret_scanning"]
+  })
+]);`,
+        workspace: `// Autonomous Google Workspace Synthesis
+const findings = await spark.executeWorkflow({
+  steps: [
+    { tool: "drive:search_files", query: "title contains 'Q3 Cloud Budget'" },
+    { tool: "sheets_agent:call", formula: "=SUM(C2:C24)", sheetId: "19xY...Qz" },
+    { tool: "gmail:create_draft", to: "team@company.com", subject: "Q3 Spend Report" }
+  ],
+  guardrails: { privacyPolicy: "STRICT_ZERO_UNSOLICITED_SENSITIVE_LEAK" }
+});`,
+        multimodal: `// Multimodal Keynote Video & AST Extraction
+const result = await spark.multimodalAnalyze({
+  source: { youtubeUrl: "https://youtu.be/sample123" },
+  targetFrameTimestamp: "14:20",
+  objective: "Extract microservices topology diagram and generate Rust AST parser",
+  validation: { runner: "cargo test --quiet" }
+});`
+      };
+
       return (
-        <section id="capabilities" className="py-20 bg-slate-900/40 border-y border-slate-800 relative">
+        <section id="capabilities" className="py-20 bg-[#070b13] border-y border-slate-800/80 relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            {/* Header */}
             <div className="text-center max-w-3xl mx-auto mb-16">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 text-xs font-semibold text-[#FBBC05] mb-3">
-                <span>⚡ Core Pillars</span>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-xs font-semibold text-[#FBBC05] mb-3">
+                <span>⚡ Core Architectural Pillars</span>
               </div>
               <h2 className="text-3xl sm:text-5xl font-bold text-white tracking-tight mb-4">
                 Engineered for <span className="google-gradient-text">Autonomous Excellence</span>
@@ -423,23 +518,26 @@
             </div>
 
             {/* 4 Cards Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
               {capabilities.map((cap) => (
                 <div
                   key={cap.id}
-                  className={`bg-slate-900/80 rounded-2xl p-8 border ${cap.borderColor} hover:shadow-2xl transition-all duration-300 flex flex-col justify-between relative overflow-hidden group`}
+                  className={`glass-card rounded-2xl p-8 border ${cap.borderColor} hover:shadow-2xl transition-all duration-300 flex flex-col justify-between relative overflow-hidden group`}
                 >
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-slate-800/30 rounded-bl-full pointer-events-none group-hover:scale-110 transition duration-500"></div>
+                  <div className="absolute top-0 right-0 w-36 h-36 bg-slate-800/20 rounded-bl-full pointer-events-none group-hover:scale-110 transition duration-500"></div>
                   
                   <div>
                     <div className="flex items-center justify-between mb-6">
                       <span className="text-4xl">{cap.icon}</span>
-                      <span className="px-3 py-1 rounded-full text-xs font-mono font-bold tracking-wider uppercase border border-slate-700 bg-slate-800 text-slate-200" style={{ color: cap.accentColor }}>
+                      <span 
+                        className="px-3 py-1 rounded-full text-xs font-mono font-bold tracking-wider uppercase border border-slate-700 bg-slate-900"
+                        style={{ color: cap.accentColor }}
+                      >
                         {cap.tag}
                       </span>
                     </div>
 
-                    <h3 className="text-2xl font-bold text-white mb-3 flex items-center gap-2">
+                    <h3 className="text-2xl font-bold text-white mb-3">
                       {cap.title}
                     </h3>
                     <p className="text-slate-300 text-sm leading-relaxed mb-6">
@@ -448,7 +546,7 @@
 
                     <div className="space-y-2.5 mb-6">
                       {cap.features.map((feat, idx) => (
-                        <div key={idx} className="flex items-start gap-2 text-xs text-slate-300">
+                        <div key={idx} className="flex items-start gap-2.5 text-xs text-slate-300">
                           <span className="mt-0.5 font-bold" style={{ color: cap.accentColor }}>✓</span>
                           <span>{feat}</span>
                         </div>
@@ -456,26 +554,73 @@
                     </div>
                   </div>
 
-                  <div className="bg-[#0b0f19] rounded-xl p-3 border border-slate-800/80 font-mono text-[11px] text-slate-300 overflow-x-auto">
-                    <div className="flex items-center justify-between pb-1.5 mb-1.5 border-b border-slate-800 text-[10px] text-slate-500">
-                      <span>EXECUTION SPEC</span>
-                      <span style={{ color: cap.accentColor }}>● ACTIVE</span>
-                    </div>
-                    <pre className="text-slate-300"><code>{cap.sampleCode}</code></pre>
+                  <div className="pt-4 border-t border-slate-800 flex items-center justify-between text-[11px] font-mono text-slate-400">
+                    <span>SPECIFICATION: ACTIVE</span>
+                    <span style={{ color: cap.accentColor }}>● LIVE DEPLOYED</span>
                   </div>
                 </div>
               ))}
             </div>
+
+            {/* Interactive Code Playground / Spec Viewer */}
+            <div className="glass-card rounded-2xl border border-slate-800 overflow-hidden shadow-2xl">
+              <div className="bg-slate-900/90 px-6 py-4 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3">
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 rounded-full bg-[#EA4335]"></div>
+                  <div className="w-3 h-3 rounded-full bg-[#FBBC05]"></div>
+                  <div className="w-3 h-3 rounded-full bg-[#34A853]"></div>
+                  <span className="text-xs text-slate-300 font-mono ml-2 font-semibold">Spark Orchestration Code Patterns</span>
+                </div>
+                <div className="flex items-center space-x-1.5">
+                  <button
+                    onClick={() => setActiveCodeTab('subagent')}
+                    className={`px-3 py-1 rounded-md text-xs font-mono font-medium transition ${
+                      activeCodeTab === 'subagent'
+                        ? 'bg-blue-600 text-white shadow-sm'
+                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                    }`}
+                  >
+                    subagent-spawn.js
+                  </button>
+                  <button
+                    onClick={() => setActiveCodeTab('workspace')}
+                    className={`px-3 py-1 rounded-md text-xs font-mono font-medium transition ${
+                      activeCodeTab === 'workspace'
+                        ? 'bg-emerald-600 text-white shadow-sm'
+                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                    }`}
+                  >
+                    workspace-sync.js
+                  </button>
+                  <button
+                    onClick={() => setActiveCodeTab('multimodal')}
+                    className={`px-3 py-1 rounded-md text-xs font-mono font-medium transition ${
+                      activeCodeTab === 'multimodal'
+                        ? 'bg-amber-600 text-white shadow-sm'
+                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                    }`}
+                  >
+                    multimodal-ast.js
+                  </button>
+                </div>
+              </div>
+              <div className="p-6 bg-[#060911] overflow-x-auto">
+                <pre className="font-mono text-xs sm:text-sm text-slate-200 leading-relaxed">
+                  <code>{codeSnippets[activeCodeTab]}</code>
+                </pre>
+              </div>
+            </div>
+
           </div>
         </section>
       );
     };
 
-    // Interactive Agent Simulator / Playground Component
-    const InteractiveSandbox = () => {
-      const [selectedScenario, setSelectedScenario] = useState('github');
+    // Interactive Agent Simulator / Sandbox Component
+    const InteractiveSandbox = ({ selectedScenario, setSelectedScenario }) => {
       const [isRunning, setIsRunning] = useState(false);
       const [stepProgress, setStepProgress] = useState(5);
+      const [activeLogTab, setActiveLogTab] = useState('terminal');
 
       const scenarios = {
         github: {
@@ -490,7 +635,22 @@
             { name: "Phase 4: Push Source Files, Assets & GitHub Actions to 'main'", status: "completed", time: "0.5s" },
             { name: "Phase 5: Deploy & Verify GitHub Pages URL (https://serguei9090.github.io/sparkwebpage/)", status: "completed", time: "0.3s" }
           ],
-          output: `[SPARK_ORCHESTRATOR] Initializing goal: 'sparkwebpage' deployment\\n[CHECKLIST] Created task.md in /artifacts/planner/ (5 milestones)\\n[SUBAGENT_1] React SPA rendered with Material You 4-Color system\\n[MCP_CALL] github:create_repository(name="sparkwebpage", private=false) -> 201 Created\\n[MCP_CALL] github:push_files(branch="main", files=[index.html, README.md, deploy.yml]) -> SHA 7f4a9b...\\n[VERIFY] Deployment status: LIVE at https://serguei9090.github.io/sparkwebpage/`
+          terminal: `[SPARK_ORCHESTRATOR] Initializing goal: 'sparkwebpage' deployment
+[CHECKLIST] Created task.md in /artifacts/planner/ (5 milestones)
+[SUBAGENT_1] React SPA rendered with Material You 4-Color system
+[MCP_CALL] github:create_repository(name="sparkwebpage", private=false) -> 201 Created
+[MCP_CALL] github:push_files(branch="main", files=[index.html, README.md, deploy.yml]) -> SHA 7f4a9b...
+[VERIFY] Deployment status: LIVE at https://serguei9090.github.io/sparkwebpage/`,
+          plan: `# task.md Execution Plan
+- [x] Phase 1: Analyze user request for 'sparkwebpage' and extract design requirements
+- [x] Phase 2: Generate React 18 SPA with Tailwind CSS and Google 4-color palette
+- [x] Phase 3: Create GitHub repository 'sparkwebpage' via GitHub MCP
+- [x] Phase 4: Push production files to branch 'main'
+- [x] Phase 5: Verify GitHub Pages deployment live status`,
+          output: `✨ SUCCESS: Google Spark React Webpage Created & Deployed!
+Repository: https://github.com/serguei9090/sparkwebpage
+Live Demo: https://serguei9090.github.io/sparkwebpage/
+Theme: Google 4-Color (Blue #4285F4, Red #EA4335, Yellow #FBBC05, Green #34A853)`
         },
         workspace: {
           title: "Multi-Source Research & Financial Sheet Sync",
@@ -503,7 +663,21 @@
             { name: "Phase 3: Update Target Google Sheet with Dynamic Formulas", status: "completed", time: "0.6s" },
             { name: "Phase 4: Prepare Executive Plain-Text Gmail Draft with Links", status: "completed", time: "0.3s" }
           ],
-          output: `[SPARK_ORCHESTRATOR] Multi-source retrieval across Drive & Workspace\\n[SUBAGENT_SPAWN] 4 worker subagents initialized for invoice extraction\\n[SUBAGENT_RESULT] Extracted total: $42,850.00 across 12 line items\\n[MCP_CALL] sheets_agent:call(spreadsheet_id="19xY...Qz", formula="=SUM(C2:C13)") -> OK\\n[MCP_CALL] gmail:create_draft(to="lead@company.com", subject="Q3 Cloud Spend Summary") -> Draft #9812`
+          terminal: `[SPARK_ORCHESTRATOR] Multi-source retrieval across Drive & Workspace
+[SUBAGENT_SPAWN] 4 worker subagents initialized for invoice extraction
+[SUBAGENT_RESULT] Extracted total: $42,850.00 across 12 line items
+[MCP_CALL] sheets_agent:call(spreadsheet_id="19xY...Qz", formula="=SUM(C2:C13)") -> OK
+[MCP_CALL] gmail:create_draft(to="lead@company.com", subject="Q3 Cloud Spend Summary") -> Draft #9812`,
+          plan: `# task.md Execution Plan
+- [x] Step 1: Query Google Drive for PDF invoices dated 2026-06-01 to 2026-08-31
+- [x] Step 2: Delegate parallel OCR parsing across 4 worker subagents
+- [x] Step 3: Insert computed variance formulas into financial Google Sheet
+- [x] Step 4: Draft executive notification email in Gmail with cited Drive links`,
+          output: `📊 SUMMARY: Q3 Cloud Spend Analysis Complete
+Total Line Items Parsed: 12 invoices
+Computed Total Spend: $42,850.00 (Variance: -4.2% vs Budget)
+Google Sheet Updated: [Q3 Financial Tracker](https://docs.google.com/spreadsheets/d/19xY.../edit)
+Gmail Draft Prepared: Draft ID #9812`
         },
         multimodal: {
           title: "Video Analysis & AST Call-Graph Generation",
@@ -516,7 +690,44 @@
             { name: "Phase 3: Generate Tree-Sitter Grammar Specification in Rust", status: "completed", time: "1.2s" },
             { name: "Phase 4: Unit Test Grammar with isolated VM bash runner", status: "completed", time: "0.5s" }
           ],
-          output: `[SPARK_ORCHESTRATOR] Multimodal ingestion: Video ID & Audio Streams\\n[VISION_REASON] Frame @ 14:20 contains 6 microservices nodes\\n[RUST_SPEC] Generated tree-sitter parser rule set: src/grammar.rs\\n[VM_BASH] cargo test --quiet -> All 18 grammar tests passed (100% OK)`
+          terminal: `[SPARK_ORCHESTRATOR] Multimodal ingestion: Video ID & Audio Streams
+[VISION_REASON] Frame @ 14:20 contains 6 microservices nodes
+[RUST_SPEC] Generated tree-sitter parser rule set: src/grammar.rs
+[VM_BASH] cargo test --quiet -> All 18 grammar tests passed (100% OK)`,
+          plan: `# task.md Execution Plan
+- [x] Step 1: Retrieve video transcript and visual keyframe tokens at timestamp 14:20
+- [x] Step 2: Synthesize architecture graph nodes and data flow connections
+- [x] Step 3: Scaffold Rust grammar crate with tree-sitter bindings
+- [x] Step 4: Execute cargo test suite in isolated VM sandbox`,
+          output: `🎥 EXTRACTED ARCHITECTURE & AST PARSER
+Keyframe Diagram Nodes: 6 services (Auth, Gateway, Queue, Store, Worker, Cache)
+Generated Rust Module: src/grammar.rs
+Test Results: 18 passed; 0 failed; 0 ignored (Completed in 0.5s)`
+        },
+        web: {
+          title: "Autonomous Web Research & Booking Flow",
+          prompt: "Perform flight & hotel research for Miami tech summit, compare top 3 boutique stays, and prepare travel itinerary.",
+          subagents: 3,
+          tools: ["google_flights:search_flights", "google_hotels_tool:get_lodging_price_data", "calendar:create_event"],
+          steps: [
+            { name: "Phase 1: Search Non-stop Flights to Miami (MIA)", status: "completed", time: "0.4s" },
+            { name: "Phase 2: Query Boutique Hotel Lodging Rates & Availability", status: "completed", time: "0.8s" },
+            { name: "Phase 3: Construct Side-by-Side Comparison Matrix", status: "completed", time: "0.5s" },
+            { name: "Phase 4: Create Calendar Event with Grounded Direct Booking URLs", status: "completed", time: "0.3s" }
+          ],
+          terminal: `[SPARK_ORCHESTRATOR] Travel optimization query initiated
+[FLIGHTS_API] Queried SFO -> MIA roundtrip (Found 4 non-stop options)
+[HOTELS_API] Queried Brickell / South Beach boutique hotels
+[CALENDAR_MCP] calendar:create_event(summary="Miami Tech Summit", time="2026-10-15") -> Created`,
+          plan: `# task.md Execution Plan
+- [x] Step 1: Query flight availability and filter for non-stop itineraries
+- [x] Step 2: Gather verified lodging rates across 3 top boutique properties
+- [x] Step 3: Compile comparative cost & amenities breakdown table
+- [x] Step 4: Schedule itinerary placeholder on primary Google Calendar`,
+          output: `✈️ TRAVEL ITINERARY READY
+Selected Flight: Flight #UA1284 (Non-stop, $340)
+Recommended Lodging: EAST Miami (Brickell, $285/night)
+Calendar Event: [Miami Tech Summit](https://calendar.google.com/...)`
         }
       };
 
@@ -533,17 +744,19 @@
             clearInterval(interval);
             setIsRunning(false);
           }
-        }, 500);
+        }, 450);
       };
 
-      const curData = scenarios[selectedScenario];
+      const curData = scenarios[selectedScenario] || scenarios.github;
 
       return (
-        <section id="sandbox" className="py-20 bg-[#080d18] relative">
+        <section id="sandbox" className="py-20 bg-[#060911] relative dot-pattern">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            {/* Section Heading */}
             <div className="text-center max-w-3xl mx-auto mb-12">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 text-xs font-semibold text-[#4285F4] mb-3">
-                <span>⚡ Live Sandbox</span>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-xs font-semibold text-[#4285F4] mb-3">
+                <span>⚡ Real-Time Autonomous Engine</span>
               </div>
               <h2 className="text-3xl sm:text-5xl font-bold text-white tracking-tight mb-4">
                 Interactive <span className="google-gradient-text">Agent Simulator</span>
@@ -553,48 +766,34 @@
               </p>
             </div>
 
-            {/* Scenario Picker */}
-            <div className="flex flex-wrap items-center justify-center gap-3 mb-10">
-              <button
-                onClick={() => handleSimulate('github')}
-                className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 ${
-                  selectedScenario === 'github'
-                    ? 'bg-[#4285F4] text-white shadow-lg shadow-blue-500/30'
-                    : 'bg-slate-800/80 text-slate-300 hover:bg-slate-700'
-                }`}
-              >
-                <span>📦</span>
-                <span>GitHub & Webpage Deployment</span>
-              </button>
-              <button
-                onClick={() => handleSimulate('workspace')}
-                className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 ${
-                  selectedScenario === 'workspace'
-                    ? 'bg-[#EA4335] text-white shadow-lg shadow-red-500/30'
-                    : 'bg-slate-800/80 text-slate-300 hover:bg-slate-700'
-                }`}
-              >
-                <span>📊</span>
-                <span>Workspace & Sheets Multi-Agent</span>
-              </button>
-              <button
-                onClick={() => handleSimulate('multimodal')}
-                className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 ${
-                  selectedScenario === 'multimodal'
-                    ? 'bg-[#34A853] text-white shadow-lg shadow-green-500/30'
-                    : 'bg-slate-800/80 text-slate-300 hover:bg-slate-700'
-                }`}
-              >
-                <span>🎥</span>
-                <span>Multimodal Video & Code Synthesis</span>
-              </button>
+            {/* Scenario Navigation Tabs */}
+            <div className="flex flex-wrap items-center justify-center gap-2.5 mb-10">
+              {[
+                { id: 'github', label: 'GitHub Pages Deployment', icon: '📦', color: '#4285F4' },
+                { id: 'workspace', label: 'Workspace Multi-Agent', icon: '📊', color: '#EA4335' },
+                { id: 'multimodal', label: 'Video & AST Grammar', icon: '🎥', color: '#34A853' },
+                { id: 'web', label: 'Web Flight & Hotel Agent', icon: '🌐', color: '#FBBC05' }
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => handleSimulate(tab.id)}
+                  className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition flex items-center gap-2 ${
+                    selectedScenario === tab.id
+                      ? 'bg-slate-800 text-white border border-slate-600 shadow-lg'
+                      : 'glass-card text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                  }`}
+                >
+                  <span>{tab.icon}</span>
+                  <span>{tab.label}</span>
+                </button>
+              ))}
             </div>
 
-            {/* Playground Box */}
-            <div className="bg-slate-900/90 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-12">
+            {/* Main Interactive Sandbox Console */}
+            <div className="glass-card rounded-2xl overflow-hidden shadow-2xl grid grid-cols-1 lg:grid-cols-12 border border-slate-800">
               
-              {/* Left Column: Mission Control & Steps */}
-              <div className="lg:col-span-6 p-6 sm:p-8 border-b lg:border-b-0 lg:border-r border-slate-800 flex flex-col justify-between">
+              {/* Left Column: Mission Control & Step Checklist */}
+              <div className="lg:col-span-6 p-6 sm:p-8 border-b lg:border-b-0 lg:border-r border-slate-800 flex flex-col justify-between bg-slate-900/40">
                 <div>
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-xs font-mono uppercase tracking-widest text-[#4285F4] font-bold">Goal Specification</span>
@@ -603,8 +802,8 @@
                     </span>
                   </div>
 
-                  <div className="bg-[#0b0f19] p-4 rounded-xl border border-slate-800 mb-6">
-                    <p className="text-sm font-medium text-slate-200 leading-relaxed font-mono">
+                  <div className="bg-[#080c14] p-4 rounded-xl border border-slate-800 mb-6">
+                    <p className="text-xs sm:text-sm font-medium text-slate-200 leading-relaxed font-mono">
                       "{curData.prompt}"
                     </p>
                   </div>
@@ -613,24 +812,24 @@
                     Execution Pipeline (task.md checklist):
                   </h4>
 
-                  <div className="space-y-3 mb-6">
+                  <div className="space-y-2.5 mb-6">
                     {curData.steps.map((st, i) => {
                       const isDone = i < stepProgress || !isRunning;
                       const isCurrent = i === stepProgress && isRunning;
                       return (
                         <div
                           key={i}
-                          className={`flex items-center justify-between p-3 rounded-lg border text-xs transition-all ${
+                          className={`flex items-center justify-between p-3 rounded-xl border text-xs transition-all ${
                             isDone 
-                              ? 'bg-slate-800/60 border-slate-700/80 text-slate-200' 
+                              ? 'bg-slate-900/80 border-slate-800 text-slate-200' 
                               : isCurrent 
-                              ? 'bg-blue-900/20 border-[#4285F4] text-white animate-pulse'
-                              : 'bg-slate-900/40 border-slate-800/40 text-slate-500'
+                              ? 'bg-blue-950/40 border-[#4285F4] text-white shadow-glow-blue'
+                              : 'bg-slate-950/40 border-slate-900 text-slate-500'
                           }`}
                         >
                           <div className="flex items-center gap-3">
                             <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
-                              isDone ? 'bg-[#34A853] text-white' : isCurrent ? 'bg-[#4285F4] text-white' : 'bg-slate-800 text-slate-500'
+                              isDone ? 'bg-[#34A853] text-white' : isCurrent ? 'bg-[#4285F4] text-white animate-pulse' : 'bg-slate-800 text-slate-500'
                             }`}>
                               {isDone ? '✓' : i + 1}
                             </span>
@@ -645,21 +844,23 @@
 
                 <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="text-[11px] text-slate-400 font-mono">Status:</span>
-                    <span className="text-[11px] font-bold text-[#34A853] font-mono">READY • STANDALONE</span>
+                    <span className="text-[11px] text-slate-400 font-mono">Engine Status:</span>
+                    <span className="text-[11px] font-bold text-[#34A853] font-mono">
+                      {isRunning ? 'EXECUTING...' : 'ONLINE • VERIFIED'}
+                    </span>
                   </div>
                   <button
                     onClick={() => handleSimulate(selectedScenario)}
                     disabled={isRunning}
-                    className="px-4 py-2 rounded-lg bg-gradient-to-r from-[#4285F4] to-[#34A853] hover:opacity-90 text-white text-xs font-bold font-mono transition flex items-center gap-1.5"
+                    className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#4285F4] to-[#2563eb] hover:from-[#5294ff] hover:to-[#3b82f6] text-white text-xs font-bold font-mono transition flex items-center gap-1.5 shadow-lg shadow-blue-500/20"
                   >
                     <span>{isRunning ? '⏳ Running...' : '▶ Re-run Simulation'}</span>
                   </button>
                 </div>
               </div>
 
-              {/* Right Column: Live Terminal Stream */}
-              <div className="lg:col-span-6 bg-[#070b12] p-6 sm:p-8 flex flex-col justify-between font-mono">
+              {/* Right Column: Live Output & Filterable Terminal Console */}
+              <div className="lg:col-span-6 bg-[#04070e] p-6 sm:p-8 flex flex-col justify-between font-mono">
                 <div>
                   <div className="flex items-center justify-between pb-3 mb-4 border-b border-slate-800">
                     <div className="flex items-center space-x-2">
@@ -668,14 +869,60 @@
                       <div className="w-3 h-3 rounded-full bg-[#34A853]"></div>
                       <span className="text-xs text-slate-400 ml-2">gemini-spark-daemon</span>
                     </div>
-                    <span className="text-[10px] text-slate-500">TTY: /dev/spark0</span>
+                    {/* View Switcher */}
+                    <div className="flex items-center space-x-1">
+                      <button
+                        onClick={() => setActiveLogTab('terminal')}
+                        className={`px-2 py-0.5 rounded text-[10px] transition ${
+                          activeLogTab === 'terminal' ? 'bg-slate-800 text-white font-bold' : 'text-slate-500 hover:text-slate-300'
+                        }`}
+                      >
+                        Terminal
+                      </button>
+                      <button
+                        onClick={() => setActiveLogTab('plan')}
+                        className={`px-2 py-0.5 rounded text-[10px] transition ${
+                          activeLogTab === 'plan' ? 'bg-slate-800 text-white font-bold' : 'text-slate-500 hover:text-slate-300'
+                        }`}
+                      >
+                        task.md
+                      </button>
+                      <button
+                        onClick={() => setActiveLogTab('output')}
+                        className={`px-2 py-0.5 rounded text-[10px] transition ${
+                          activeLogTab === 'output' ? 'bg-slate-800 text-white font-bold' : 'text-slate-500 hover:text-slate-300'
+                        }`}
+                      >
+                        Final Output
+                      </button>
+                    </div>
                   </div>
 
                   <div className="text-xs text-slate-300 space-y-2 leading-relaxed h-[320px] overflow-y-auto">
-                    <p className="text-slate-500">// Google Spark Subagent Orchestration Stream</p>
-                    <pre className="whitespace-pre-wrap font-mono text-[11px] text-emerald-400">
-                      {curData.output}
-                    </pre>
+                    {activeLogTab === 'terminal' && (
+                      <div>
+                        <p className="text-slate-500 mb-2">// Real-time MCP daemon stream</p>
+                        <pre className="whitespace-pre-wrap font-mono text-[11px] text-emerald-400">
+                          {curData.terminal}
+                        </pre>
+                      </div>
+                    )}
+                    {activeLogTab === 'plan' && (
+                      <div>
+                        <p className="text-slate-500 mb-2">// Checklist generated in /artifacts/planner/</p>
+                        <pre className="whitespace-pre-wrap font-mono text-[11px] text-amber-300">
+                          {curData.plan}
+                        </pre>
+                      </div>
+                    )}
+                    {activeLogTab === 'output' && (
+                      <div>
+                        <p className="text-slate-500 mb-2">// Grounded result synthesized with citation protocol</p>
+                        <pre className="whitespace-pre-wrap font-mono text-[11px] text-cyan-300">
+                          {curData.output}
+                        </pre>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -694,53 +941,55 @@
       );
     };
 
-    // Tool Ecosystem Component
+    // Universal Tool Matrix & Directory Component
     const ToolEcosystemSection = () => {
       const [category, setCategory] = useState('dev');
+      const [selectedToolModal, setSelectedToolModal] = useState(null);
 
       const toolsData = {
         dev: [
-          { name: "GitHub MCP Server", icon: "🐙", color: "#4285F4", desc: "Repository lifecycle, branches, commits, PR reviews, code search and issue tracking." },
-          { name: "VM Shell & Bash Engine", icon: "💻", color: "#EA4335", desc: "Isolated deterministic execution environment for Python, Node, data analysis, and testing." },
-          { name: "Custom Skills Hub", icon: "⚡", color: "#FBBC05", desc: "Dynamic YAML skill definitions, domain-specific instructions, and executable asset loaders." },
-          { name: "Git & AST Parsers", icon: "🌳", color: "#34A853", desc: "High-performance semantic syntax analysis and code-call graph mapping." }
+          { name: "GitHub MCP Server", icon: "🐙", color: "#4285F4", desc: "Repository lifecycle, branches, commits, PR reviews, code search and issue tracking.", methods: ["create_repository", "push_files", "create_pull_request", "search_code"] },
+          { name: "VM Shell & Bash Engine", icon: "💻", color: "#EA4335", desc: "Isolated deterministic execution environment for Python, Node, data analysis, and testing.", methods: ["execute_bash", "run_tests", "inspect_filesystem"] },
+          { name: "Custom Skills Hub", icon: "⚡", color: "#FBBC05", desc: "Dynamic YAML skill definitions, domain-specific instructions, and executable asset loaders.", methods: ["lookup_skills", "save_skill", "update_skill"] },
+          { name: "Git & AST Parsers", icon: "🌳", color: "#34A853", desc: "High-performance semantic syntax analysis and code-call graph mapping.", methods: ["tree_sitter_parse", "graph_build", "diff_analysis"] }
         ],
         workspace: [
-          { name: "Google Docs Agent", icon: "📝", color: "#4285F4", desc: "Granular document formatting, executive summaries, and structured multi-page drafts." },
-          { name: "Google Sheets Agent", icon: "📊", color: "#34A853", desc: "Advanced cell formula insertion, variance analytics, and autonomous table management." },
-          { name: "Google Slides Agent", icon: "📽️", color: "#FBBC05", desc: "Full presentation generation, custom theme layout orchestration, and visual elements." },
-          { name: "Google Drive MCP", icon: "📁", color: "#4285F4", desc: "Semantic file indexation, folder organization, metadata analysis, and multi-format exports." }
+          { name: "Google Docs Agent", icon: "📝", color: "#4285F4", desc: "Granular document formatting, executive summaries, and structured multi-page drafts.", methods: ["docs_agent:call", "insert_text", "format_headers"] },
+          { name: "Google Sheets Agent", icon: "📊", color: "#34A853", desc: "Advanced cell formula insertion, variance analytics, and autonomous table management.", methods: ["sheets_agent:call", "calculate_variance", "format_cells"] },
+          { name: "Google Slides Agent", icon: "📽️", color: "#FBBC05", desc: "Full presentation generation, custom theme layout orchestration, and visual elements.", methods: ["slides:update", "generate_slide", "edit_slide"] },
+          { name: "Google Drive MCP", icon: "📁", color: "#4285F4", desc: "Semantic file indexation, folder organization, metadata analysis, and multi-format exports.", methods: ["drive:search_files", "read_file_content", "download_file_content"] }
         ],
         comms: [
-          { name: "Gmail Automation Suite", icon: "✉️", color: "#EA4335", desc: "Thread searching, email composition, draft lifecycle, label triage, and filter creation." },
-          { name: "Google Calendar Agent", icon: "📅", color: "#4285F4", desc: "Meeting scheduling, multi-participant free-time suggestions, and conflict resolution." },
-          { name: "Google Keep & Tasks", icon: "✅", color: "#FBBC05", desc: "Lightweight reminder tracking, action-item synchronization, and task lifecycle management." },
-          { name: "Google Chat Service", icon: "💬", color: "#34A853", desc: "Space conversation querying, automated thread updates, and member notifications." }
+          { name: "Gmail Automation Suite", icon: "✉️", color: "#EA4335", desc: "Thread searching, email composition, draft lifecycle, label triage, and filter creation.", methods: ["gmail:create_draft", "gmail:search_threads", "gmail:reply"] },
+          { name: "Google Calendar Agent", icon: "📅", color: "#4285F4", desc: "Meeting scheduling, multi-participant free-time suggestions, and conflict resolution.", methods: ["calendar:suggest_time", "calendar:create_event", "calendar:list_events"] },
+          { name: "Google Keep & Tasks", icon: "✅", color: "#FBBC05", desc: "Lightweight reminder tracking, action-item synchronization, and task lifecycle management.", methods: ["tasks_tool_agent:create_task", "keep:create_note"] },
+          { name: "Google Chat Service", icon: "💬", color: "#34A853", desc: "Space conversation querying, automated thread updates, and member notifications.", methods: ["chat:search_messages", "chat:list_messages"] }
         ],
         web: [
-          { name: "Web Browser Agent", icon: "🌐", color: "#4285F4", desc: "Autonomous browser actuation for multi-step tasks, e-commerce, and live interactive data." },
-          { name: "Google Search Engine", icon: "🔍", color: "#FBBC05", desc: "Real-time web retrieval, authoritative snippet verification, and multi-source grounding." },
-          { name: "Google Maps & Places", icon: "📍", color: "#34A853", desc: "Point-of-interest lookups, step-by-step routing, busyness estimations, and open hours." },
-          { name: "Google Flights & Hotels", icon: "✈️", color: "#EA4335", desc: "Live flight pricing, lodging rates, itinerary comparison, and availability queries." }
+          { name: "Web Browser Agent", icon: "🌐", color: "#4285F4", desc: "Autonomous browser actuation for multi-step tasks, e-commerce, and live interactive data.", methods: ["web_browser_agent:actuate", "navigate", "click", "extract"] },
+          { name: "Google Search Engine", icon: "🔍", color: "#FBBC05", desc: "Real-time web retrieval, authoritative snippet verification, and multi-source grounding.", methods: ["google:search", "google:browse"] },
+          { name: "Google Maps & Places", icon: "📍", color: "#34A853", desc: "Point-of-interest lookups, step-by-step routing, busyness estimations, and open hours.", methods: ["google_maps_tool:find_places", "find_directions"] },
+          { name: "Google Flights & Hotels", icon: "✈️", color: "#EA4335", desc: "Live flight pricing, lodging rates, itinerary comparison, and availability queries.", methods: ["google_flights:search_flights", "get_lodging_price_data"] }
         ]
       };
 
       return (
-        <section id="tools" className="py-20 bg-[#0b0f19] border-t border-slate-800">
+        <section id="tools" className="py-20 bg-[#070b13] border-t border-slate-800">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
             <div className="text-center max-w-3xl mx-auto mb-14">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 text-xs font-semibold text-[#34A853] mb-3">
-                <span>🛠️ Integrations</span>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-xs font-semibold text-[#34A853] mb-3">
+                <span>🛠️ Universal Integrations</span>
               </div>
               <h2 className="text-3xl sm:text-5xl font-bold text-white tracking-tight mb-4">
                 The Universal <span className="google-gradient-text">Tool Ecosystem</span>
               </h2>
               <p className="text-slate-400 text-base sm:text-lg">
-                Google Spark connects seamlessly to mission-critical APIs across the Google ecosystem and developer toolchains.
+                Google Spark connects seamlessly to mission-critical APIs across the Google ecosystem and developer toolchains via Model Context Protocol.
               </p>
             </div>
 
-            {/* Category Switcher */}
+            {/* Category Filter Tabs */}
             <div className="flex flex-wrap justify-center gap-2 mb-12">
               {[
                 { id: 'dev', label: 'Developer & Code' },
@@ -751,9 +1000,9 @@
                 <button
                   key={tab.id}
                   onClick={() => setCategory(tab.id)}
-                  className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition ${
+                  className={`px-5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition ${
                     category === tab.id
-                      ? 'bg-slate-800 text-white border border-slate-600 shadow-md'
+                      ? 'bg-slate-800 text-white border border-slate-700 shadow-md'
                       : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
                   }`}
                 >
@@ -762,12 +1011,13 @@
               ))}
             </div>
 
-            {/* Tools Grid */}
+            {/* Tools Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {toolsData[category].map((tool, idx) => (
                 <div
                   key={idx}
-                  className="bg-slate-900/90 rounded-xl p-6 border border-slate-800 hover:border-slate-700 hover:shadow-xl transition flex flex-col justify-between group"
+                  onClick={() => setSelectedToolModal(tool)}
+                  className="glass-card rounded-2xl p-6 border border-slate-800 hover:border-slate-700 hover:shadow-2xl transition cursor-pointer flex flex-col justify-between group"
                 >
                   <div>
                     <div className="flex items-center justify-between mb-4">
@@ -775,97 +1025,207 @@
                       <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: tool.color }}></div>
                     </div>
                     <h3 className="text-base font-bold text-white mb-2">{tool.name}</h3>
-                    <p className="text-xs text-slate-400 leading-relaxed">{tool.desc}</p>
+                    <p className="text-xs text-slate-300 leading-relaxed mb-4">{tool.desc}</p>
                   </div>
-                  <div className="mt-6 pt-3 border-t border-slate-800 flex items-center justify-between text-[11px] font-mono text-slate-500">
-                    <span>MCP PROTOCOL</span>
-                    <span className="text-emerald-400">ENABLED</span>
+                  
+                  <div className="pt-3 border-t border-slate-800 flex items-center justify-between text-[11px] font-mono text-slate-400">
+                    <span>{tool.methods.length} Methods</span>
+                    <span className="text-[#4285F4] group-hover:underline">Inspect ↗</span>
                   </div>
                 </div>
               ))}
             </div>
+
+            {/* Modal Tool Inspector */}
+            {selectedToolModal && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+                <div className="bg-[#0b0f19] border border-slate-700 rounded-2xl max-w-lg w-full p-6 shadow-2xl">
+                  <div className="flex items-center justify-between pb-4 border-b border-slate-800 mb-4">
+                    <div className="flex items-center gap-3">
+                      <span className="text-3xl">{selectedToolModal.icon}</span>
+                      <div>
+                        <h4 className="text-lg font-bold text-white">{selectedToolModal.name}</h4>
+                        <span className="text-xs text-slate-400 font-mono">MCP Protocol v1.8</span>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setSelectedToolModal(null)}
+                      className="text-slate-400 hover:text-white text-lg font-bold p-1"
+                    >
+                      ✕
+                    </button>
+                  </div>
+
+                  <p className="text-sm text-slate-300 mb-4">{selectedToolModal.desc}</p>
+
+                  <h5 className="text-xs font-bold text-slate-400 font-mono uppercase tracking-wider mb-2">
+                    Available MCP Tool RPC Methods:
+                  </h5>
+                  <div className="space-y-1.5 mb-6">
+                    {selectedToolModal.methods.map((m, i) => (
+                      <div key={i} className="p-2 rounded bg-slate-900 border border-slate-800 font-mono text-xs text-blue-400 flex items-center justify-between">
+                        <span>{m}()</span>
+                        <span className="text-[10px] text-slate-500">rpc</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="flex justify-end">
+                    <button
+                      onClick={() => setSelectedToolModal(null)}
+                      className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold"
+                    >
+                      Close Inspector
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
           </div>
         </section>
       );
     };
 
-    // Architecture & Cognitive Pipeline Component
+    // Cognitive Pipeline Architecture Component
     const ArchitectureSection = () => {
+      const [selectedStage, setSelectedStage] = useState(0);
+
       const archSteps = [
         {
           num: "01",
           title: "User Intent & Disambiguation",
           desc: "Parses complex natural language queries, identifies potential ambiguities, and resolves missing entities through targeted verification.",
-          color: "#4285F4"
+          color: "#4285F4",
+          badge: "Input Stage",
+          details: "Applies multi-token classification to detect whether a query is simple (direct lookup) or complex (requiring checklist tracking). Identifies unresolvable references and triggers single targeted verification before user consultation."
         },
         {
           num: "02",
           title: "Checklist & Planning (task.md)",
           desc: "Creates structured, granular milestones in /artifacts/planner/task.md with due diligence and risk assessment performed upfront.",
-          color: "#EA4335"
+          color: "#EA4335",
+          badge: "Planner Stage",
+          details: "Generates comprehensive task.md checklists. Ensures all due diligence, file scanning, and research steps are finalized before initiating mutated file writes."
         },
         {
           num: "03",
           title: "Subagent Parallel Spawning",
           desc: "Detects multi-source or multi-entity tasks and spawns isolated subagents concurrently to prevent context bloat and speed throughput.",
-          color: "#FBBC05"
+          color: "#FBBC05",
+          badge: "Swarm Stage",
+          details: "Allocates isolated subagent instances concurrently via invoke_subagent. Prevents main context window degradation when analyzing large multi-page PDFs or multi-repo diffs."
         },
         {
           num: "04",
           title: "MCP Tool Execution & Validation",
           desc: "Calls specialized external tools (GitHub, Drive, Bash, Sheets) with strict parameter validation and self-correcting error handling.",
-          color: "#34A853"
+          color: "#34A853",
+          badge: "Execution Stage",
+          details: "Strict JSON schema validation for all tool parameters. Integrates live bash sandboxes with deterministic python execution and direct GitHub REST/GraphQL endpoints."
         },
         {
           num: "05",
           title: "Synthesis & Grounded Delivery",
           desc: "Merges subagent findings, resolves data conflicts using recency weighting, and delivers clickable citation links for all claims.",
-          color: "#4285F4"
+          color: "#4285F4",
+          badge: "Delivery Stage",
+          details: "Every factual statement is backed by clickable inline markdown links ([Title](URL)) extracted directly from tool response payloads. Strictly adheres to sensitive data zero-leak protocols."
         }
       ];
 
       return (
-        <section id="architecture" className="py-20 bg-slate-900/50 border-t border-slate-800">
+        <section id="architecture" className="py-20 bg-[#060911] border-t border-slate-800 dot-pattern">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
             <div className="text-center max-w-3xl mx-auto mb-16">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 text-xs font-semibold text-[#EA4335] mb-3">
-                <span>⚙️ System Design</span>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-xs font-semibold text-[#EA4335] mb-3">
+                <span>⚙️ System Architecture</span>
               </div>
               <h2 className="text-3xl sm:text-5xl font-bold text-white tracking-tight mb-4">
                 Cognitive <span className="google-gradient-text">Execution Pipeline</span>
               </h2>
               <p className="text-slate-400 text-base sm:text-lg">
-                How Google Spark moves from abstract prompt to verified, production-grade output.
+                Click any pipeline stage below to inspect internal processing logic, guardrails, and validation criteria.
               </p>
             </div>
 
-            {/* Step-by-step Flow */}
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+            {/* Pipeline Stage Buttons */}
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-3 mb-8">
               {archSteps.map((step, idx) => (
                 <div
                   key={idx}
-                  className="bg-[#0b0f19] p-6 rounded-2xl border border-slate-800 hover:border-slate-700 transition flex flex-col justify-between relative"
+                  onClick={() => setSelectedStage(idx)}
+                  className={`p-5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
+                    selectedStage === idx
+                      ? 'bg-slate-800/90 border-slate-500 shadow-xl'
+                      : 'glass-card hover:bg-slate-800/40'
+                  }`}
                 >
-                  <div className="text-2xl font-black font-mono mb-4" style={{ color: step.color }}>
-                    {step.num}
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-2xl font-black font-mono" style={{ color: step.color }}>{step.num}</span>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-900 text-slate-400 border border-slate-800">
+                      {step.badge}
+                    </span>
                   </div>
-                  <div>
-                    <h3 className="text-sm font-bold text-white mb-2">{step.title}</h3>
-                    <p className="text-xs text-slate-400 leading-relaxed">{step.desc}</p>
-                  </div>
-                  <div className="mt-4 pt-3 border-t border-slate-800/60 flex items-center justify-between text-[10px] font-mono text-slate-500">
-                    <span>STAGE {idx + 1}</span>
-                    <span style={{ color: step.color }}>● PASSED</span>
-                  </div>
+                  <h3 className="text-xs font-bold text-white leading-snug">{step.title}</h3>
                 </div>
               ))}
             </div>
+
+            {/* Selected Stage Detail Inspector */}
+            <div className="glass-card rounded-2xl p-8 border border-slate-800 shadow-2xl">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-800 mb-6">
+                <div>
+                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
+                    STAGE {archSteps[selectedStage].num} DEEP DIVE
+                  </span>
+                  <h3 className="text-2xl font-bold text-white mt-1">
+                    {archSteps[selectedStage].title}
+                  </h3>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="h-3 w-3 rounded-full" style={{ backgroundColor: archSteps[selectedStage].color }}></span>
+                  <span className="text-xs font-mono text-slate-300 uppercase">Operational Guardrails Active</span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                  <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 font-mono">Overview</h4>
+                  <p className="text-slate-200 text-sm leading-relaxed mb-4">
+                    {archSteps[selectedStage].desc}
+                  </p>
+                  <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 font-mono">Under the Hood</h4>
+                  <p className="text-slate-300 text-xs leading-relaxed">
+                    {archSteps[selectedStage].details}
+                  </p>
+                </div>
+
+                <div className="bg-[#050811] p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-300">
+                  <div className="text-[10px] text-slate-500 pb-2 border-b border-slate-800 mb-2 flex justify-between">
+                    <span>STAGE SPECIFICATION PAYLOAD</span>
+                    <span className="text-emerald-400">STATUS: VERIFIED</span>
+                  </div>
+                  <pre className="text-[11px] text-blue-300 overflow-x-auto">
+{`{
+  "stage": "${archSteps[selectedStage].num}",
+  "module": "${archSteps[selectedStage].title.toLowerCase().replace(/[^a-z0-9]/g, '_')}",
+  "guardrailPolicy": "STRICT_ZERO_UNSOLICITED_SENSITIVE_LEAK",
+  "concurrency": "MAX_PARALLEL_ISOLATED",
+  "citationRequired": true
+}`}
+                  </pre>
+                </div>
+              </div>
+            </div>
+
           </div>
         </section>
       );
     };
 
-    // Benchmarks & Comparison Section
+    // Performance Benchmarks Section
     const BenchmarksSection = () => {
       const comparisons = [
         {
@@ -895,35 +1255,36 @@
       ];
 
       return (
-        <section id="benchmarks" className="py-20 bg-[#080d18] border-t border-slate-800">
+        <section id="benchmarks" className="py-20 bg-[#070b13] border-t border-slate-800">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
             <div className="text-center max-w-3xl mx-auto mb-16">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 text-xs font-semibold text-[#FBBC05] mb-3">
-                <span>📊 Benchmarks</span>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-xs font-semibold text-[#FBBC05] mb-3">
+                <span>📊 Empirical Benchmarks</span>
               </div>
               <h2 className="text-3xl sm:text-5xl font-bold text-white tracking-tight mb-4">
                 Performance <span className="google-gradient-text">Matrix</span>
               </h2>
               <p className="text-slate-400 text-base sm:text-lg">
-                Comparing Google Spark's subagent architecture against conventional single-thread LLMs.
+                Comparing Google Spark's subagent architecture against conventional single-thread LLMs and legacy automation scripts.
               </p>
             </div>
 
             {/* Table */}
-            <div className="bg-slate-900/80 rounded-2xl border border-slate-800 overflow-hidden shadow-2xl">
+            <div className="glass-card rounded-2xl border border-slate-800 overflow-hidden shadow-2xl">
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="bg-slate-800/80 text-xs font-bold uppercase tracking-wider text-slate-300 font-mono border-b border-slate-700">
+                    <tr className="bg-slate-900/90 text-xs font-bold uppercase tracking-wider text-slate-300 font-mono border-b border-slate-800">
                       <th className="p-4 sm:p-5">Evaluation Metric</th>
                       <th className="p-4 sm:p-5 text-[#4285F4]">Google Spark 2.5</th>
                       <th className="p-4 sm:p-5 text-slate-400">Single-Thread LLM</th>
                       <th className="p-4 sm:p-5 text-slate-400">Legacy Pipelines</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-800 text-xs sm:text-sm">
+                  <tbody className="divide-y divide-slate-800/60 text-xs sm:text-sm">
                     {comparisons.map((row, idx) => (
-                      <tr key={idx} className="hover:bg-slate-800/40 transition">
+                      <tr key={idx} className="hover:bg-slate-800/30 transition">
                         <td className="p-4 sm:p-5 font-medium text-slate-200">{row.metric}</td>
                         <td className="p-4 sm:p-5 font-bold text-emerald-400 bg-emerald-950/20">{row.spark}</td>
                         <td className="p-4 sm:p-5 text-slate-400">{row.traditional}</td>
@@ -934,6 +1295,76 @@
                 </table>
               </div>
             </div>
+
+          </div>
+        </section>
+      );
+    };
+
+    // FAQ Component
+    const FAQSection = () => {
+      const [openIndex, setOpenIndex] = useState(0);
+
+      const faqs = [
+        {
+          q: "What makes Google Spark distinct from traditional chat assistants?",
+          a: "Google Spark is not merely a conversational model; it is an autonomous research and task execution engine. It deconstructs complex goals into structured checklists (task.md), spawns concurrent subagents to process multi-source data without context degradation, and connects natively to 18+ Model Context Protocol (MCP) toolchains including GitHub, Google Workspace, and isolated VM shells."
+        },
+        {
+          q: "How does the subagent delegation architecture prevent context bloat?",
+          a: "Instead of ingesting large multi-page documents or deep repository commit trees sequentially into one monolithic prompt, Google Spark spawns independent worker subagents (via invoke_subagent). Each subagent processes its respective domain in isolation and returns only high-signal synthesized summaries to the primary orchestrator."
+        },
+        {
+          q: "How are privacy and sensitive user data protected?",
+          a: "Google Spark enforces a strict zero-unsolicited-leak sensitive data protocol. Sensitive categories (such as passwords, health records, biometrics, financial info) are never inferred or exposed unless explicitly demanded by the user for a strictly necessary task. Factual statements are always cited with direct, grounded URLs."
+        },
+        {
+          q: "How was this webpage created and deployed?",
+          a: "This entire web application was scaffolded as a standalone React 18 Single Page Application with Tailwind CSS, Google 4-Color design system, and deployed directly to GitHub Pages via a dedicated GitHub Actions CI/CD workflow in the 'serguei9090/sparkwebpage' repository."
+        }
+      ];
+
+      return (
+        <section id="faq" className="py-20 bg-[#060911] border-t border-slate-800">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div className="text-center mb-14">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-xs font-semibold text-[#4285F4] mb-3">
+                <span>❓ Knowledge Base</span>
+              </div>
+              <h2 className="text-3xl sm:text-4xl font-bold text-white tracking-tight mb-3">
+                Frequently Asked <span className="google-gradient-text">Questions</span>
+              </h2>
+              <p className="text-slate-400 text-sm sm:text-base">
+                Everything you need to know about Google Spark architecture and deployment.
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              {faqs.map((faq, idx) => {
+                const isOpen = openIndex === idx;
+                return (
+                  <div
+                    key={idx}
+                    className="glass-card rounded-2xl border border-slate-800 overflow-hidden transition"
+                  >
+                    <button
+                      onClick={() => setOpenIndex(isOpen ? -1 : idx)}
+                      className="w-full p-5 text-left flex items-center justify-between gap-4 hover:bg-slate-800/30 transition"
+                    >
+                      <span className="text-sm sm:text-base font-bold text-white">{faq.q}</span>
+                      <span className="text-lg text-slate-400 font-mono">{isOpen ? '−' : '+'}</span>
+                    </button>
+                    {isOpen && (
+                      <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-300 leading-relaxed border-t border-slate-800/60">
+                        {faq.a}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
           </div>
         </section>
       );
@@ -942,25 +1373,30 @@
     // Footer Component
     const Footer = () => {
       return (
-        <footer className="bg-[#050811] text-slate-400 text-xs border-t border-slate-800">
+        <footer className="bg-[#04060c] text-slate-400 text-xs border-t border-slate-800">
           <GoogleColorBar className="h-1 w-full" />
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div className="flex flex-col md:flex-row items-center justify-between gap-6">
               
               <div className="flex items-center space-x-3">
-                <SparkIcon className="w-7 h-7" />
+                <SparkEmblem className="w-7 h-7" animated={false} />
                 <div>
-                  <span className="font-bold text-white text-sm">Google Spark</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-bold text-white text-sm">Google Spark</span>
+                    <span className="text-[10px] px-1.5 py-0.2 rounded bg-slate-800 text-slate-400 font-mono">v2.5</span>
+                  </div>
                   <p className="text-slate-500 text-[11px]">Autonomous Multimodal Research & Execution Engine</p>
                 </div>
               </div>
 
-              <div className="flex flex-wrap items-center justify-center gap-6 font-medium text-slate-400">
+              <div className="flex flex-wrap items-center justify-center gap-6 font-medium text-slate-400 text-xs">
                 <a href="#overview" className="hover:text-white transition">Overview</a>
                 <a href="#capabilities" className="hover:text-white transition">Capabilities</a>
+                <a href="#sandbox" className="hover:text-white transition">Simulator</a>
                 <a href="#tools" className="hover:text-white transition">Tool Ecosystem</a>
-                <a href="#sandbox" className="hover:text-white transition">Sandbox</a>
                 <a href="#architecture" className="hover:text-white transition">Architecture</a>
+                <a href="#benchmarks" className="hover:text-white transition">Benchmarks</a>
+                <a href="#faq" className="hover:text-white transition">FAQ</a>
                 <a 
                   href="https://github.com/serguei9090/sparkwebpage" 
                   target="_blank" 
@@ -973,7 +1409,7 @@
 
               <div className="text-center md:text-right font-mono text-[11px] text-slate-500">
                 <p>Designed & Deployed by Serguei Castillo (<a href="https://github.com/serguei9090" target="_blank" className="text-slate-300 hover:text-white underline">@serguei9090</a>)</p>
-                <p className="mt-1">Google Colors: <span className="text-[#4285F4]">Blue</span> • <span className="text-[#EA4335]">Red</span> • <span className="text-[#FBBC05]">Yellow</span> • <span className="text-[#34A853]">Green</span></p>
+                <p className="mt-1">Google Palette: <span className="text-[#4285F4]">#4285F4</span> • <span className="text-[#EA4335]">#EA4335</span> • <span className="text-[#FBBC05]">#FBBC05</span> • <span className="text-[#34A853]">#34A853</span></p>
               </div>
 
             </div>
@@ -982,27 +1418,35 @@
       );
     };
 
-    // Main App Component
+    // Main App Root Component
     const App = () => {
       const [activeSection, setActiveSection] = useState('overview');
+      const [selectedScenario, setSelectedScenario] = useState('github');
+
+      const handlePromptSelect = (scenarioKey) => {
+        setSelectedScenario(scenarioKey);
+        const el = document.getElementById('sandbox');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      };
 
       return (
         <div className="flex flex-col min-h-screen">
           <Navbar activeSection={activeSection} setActiveSection={setActiveSection} />
           <main className="flex-grow">
-            <HeroSection />
+            <HeroSection onSelectPrompt={handlePromptSelect} />
             <CapabilitiesSection />
-            <InteractiveSandbox />
+            <InteractiveSandbox selectedScenario={selectedScenario} setSelectedScenario={setSelectedScenario} />
             <ToolEcosystemSection />
             <ArchitectureSection />
             <BenchmarksSection />
+            <FAQSection />
           </main>
           <Footer />
         </div>
       );
     };
 
-    // Render the React Application
+    // Render App
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<App />);
   </script>
